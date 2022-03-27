@@ -22,10 +22,11 @@ const msgWon = 'You won!';
 const msgLost = 'You lost!';
 const msgDraw = 'It\'s a draw!'
 
-
+//TODO Scoring
+let computerScore = 0;
+let playerScore = 0;
 
 //We need to check if player made a choice
-
 function isChoiceCorrect(playerChoice){
 
     console.log('Checking choice')
@@ -55,7 +56,7 @@ function computerChoosing(){
     let randomNumber = Math.floor(Math.random() * 3) 
     /*  randomNumber will be between 0 and 2
         since Math.random() will return [0,1) number
-        0 * 3 = 0 anyways, and 0,999 * 3 = 2 when floored
+        0 * 3 = 0 anyways and 0,999 * 3 = 2 when floored
     */
 
     if (randomNumber == 0) return 'rock'
@@ -79,6 +80,13 @@ function isDraw(player, computer){
 //Checking if player won against a computer
 function didPlayerWon(player, computer){
 
+
+    /* I will forget about this return statemnt so I'll write how it works
+       On the rock example
+       If I choose rock then for me to win computer must choose scissors
+       Hence the computer == 'scissors' part. If it's true then I win. That's it.
+    */
+        
     switch(player){
         case 'rock':
             return computer == 'scissors';
@@ -91,7 +99,7 @@ function didPlayerWon(player, computer){
     }
 }
 
-function compareChoosings(player, computer){
+function playRound(player, computer){
 
 
     // Rock -> Scissors
@@ -132,6 +140,7 @@ function gameLoop(numberOfRounds)
 
         playerChoice = prompt(' Choose between "Rock", "Paper" and "Scissors" ')
 
+        // If the input is null, 0 or undefined stop the game
         if (!playerChoice) break;
 
         playerChoice = playerChoice.toLowerCase()
@@ -141,14 +150,14 @@ function gameLoop(numberOfRounds)
         if (isChoiceCorrect(playerChoice)){
 
             computerChoice = computerChoosing();
-            compareChoosings(playerChoice, computerChoice);
+            playRound(playerChoice, computerChoice);
 
         }
         else{
 
             alert(`Oopise, there is no ${playerChoice} in this game!`); //Sounds afwul :D
 
-            i--;//Not punishing for misspells 
+            i--; //Not punishing for misspells 
 
         }
 
