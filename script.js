@@ -15,12 +15,15 @@ Paper -> Rock
 */
 
 
-const msgWon = 'You won!';
-const msgLost = 'You lost!';
-const msgDraw = 'It\'s a draw!'
+const MSG_WON = 'You won!';
+const MSG_LOST = 'You lost!';
+const MSG_DRAW = 'It\'s a draw!'
+const STOP = 'stop';
+const SECRET = Math.random();
 
 let playerChoice = '';
 let computerChoice = '';
+let computerChoice2 = '';
 
 let computerScore = 0;
 let playerScore = 0;
@@ -119,7 +122,7 @@ function playRound(player, computer){
 
     if (isDraw(player, computer)) {
 
-        console.log(`${msgDraw} ${message}`);
+        console.log(`${MSG_DRAW} ${message}`);
 
         drawCount += 1;
 
@@ -128,7 +131,7 @@ function playRound(player, computer){
 
     if(didPlayerWon(player, computer)){
 
-        console.log(`${msgWon}  ${message}`);
+        console.log(`${MSG_WON}  ${message}`);
 
         playerScore += 1;
 
@@ -136,7 +139,7 @@ function playRound(player, computer){
     }
     else if (!didPlayerWon(player, computer)){
         
-        console.log(`${msgLost} ${message}`);
+        console.log(`${MSG_LOST} ${message}`);
 
         computerScore +=1
 
@@ -151,9 +154,9 @@ function playRound(player, computer){
 
 function checkWinner(playerScore, computerScore){
 
-    if (playerScore == computerScore) return msgDraw
-    if (playerScore > computerScore) return msgWon
-    return msgLost
+    if (playerScore == computerScore) return MSG_DRAW
+    if (playerScore > computerScore) return MSG_WON
+    return MSG_LOST
 
 }
 
@@ -175,38 +178,67 @@ function printGameOverMessage(playerScore, computerScore, drawCount){
 
 }
 
-function handleGame(roundNumber){
 
-    console.log('');
-    console.log('Game number ' + (roundNumber))
-    if (canPlayerChoose) {playerChoice = prompt(' Choose between "Rock", "Paper" and "Scissors" ')}
+/*Handle choice function
 
-    // If the input is null, 0 or undefined stop the game
-    // return 1 means that we need to stop the game
-    if (!playerChoice) return 1;
+We accept a player's choice
+If it's a correct choice let the game begin
+If it's a secret choice at the first round let the secret begin 
+If it's an incorrect choice ask them to type the choice again
+if it's a 'null' exit the game
 
-    if (canPlayerChoose && playerChoice == '42' && roundNumber == 1 ){
-        canPlayerChoose = false;
-        gameLoop(42);
-        return 1;
+*/
+
+function handlePlayerChoice(roundNumber){
+
+    if (canPlayerChoose) {
+        playerChoice = prompt(' Choose between "Rock", "Paper" and "Scissors" ');
+
+        if (parseInt(playerChoice) == 42 && roundNumber == 1) return SECRET
+        if (playerChoice == null) return STOP
+
+        playerChoice = playerChoice.toLowerCase()
+        if (isChoiceCorrect(playerChoice)) return playerChoice
+
+        console.log(`Apparently there is no ' ${playerChoice} ' in this game. Try again please.`)
+        handlePlayerChoice(roundNumber)
+    }else{
+        return SECRET
     }
 
-    canPlayerChoose? playerChoice = playerChoice.toLowerCase() : playerChoice = makeRandomChoice()
+    
 
-   
-    if (isChoiceCorrect(playerChoice)){
+}
 
-        computerChoice = makeRandomChoice();
-        playRound(playerChoice, computerChoice);
+function handleSecret(){
+
+    computerChoice2 = makeRandomChoice();
+    console.log(`Computer 2 choosed ${computerChoice2}`)
+    playRound(computerChoice, computerChoice2);
+
+}
+
+function handleGame(roundNumber){
+
+    console.log('<==--- ---==>');
+    console.log('Game number ' + (roundNumber))
+    console.log('<==--- ---==>');
+
+    playerChoice = handlePlayerChoice(roundNumber)
+    computerChoice = makeRandomChoice()
+    console.log(`Computer choosed ${computerChoice}`)
+
+    if(playerChoice === STOP) return STOP
+    if(playerChoice === SECRET){
+        canPlayerChoose = false;
+        handleSecret();
 
     }
     else{
-
-        console.log(`Oopise, there is no ${playerChoice} in this game!`); //Sounds afwul :D
-
-        if (handleGame(roundNumber)) return 1; //Not punishing for misspells 
-
+        playRound(playerChoice, computerChoice)
     }
+
+    
 
 }
 
@@ -220,12 +252,7 @@ function gameLoop(numberOfRounds = 5)
         
     }
 
-    if (isStopped){
-        canPlayerChoose? console.log('You aborted the game!') : printGameOverMessage(playerScore, computerScore, drawCount);
-    }
-    else{
-        printGameOverMessage(playerScore, computerScore, drawCount);
-    }
+    printGameOverMessage(playerScore, computerScore, drawCount)
 
 }
 
