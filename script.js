@@ -15,16 +15,18 @@ Paper -> Rock
 */
 
 
-let playerChoice = '';
-let computerChoice = '';
-
 const msgWon = 'You won!';
 const msgLost = 'You lost!';
 const msgDraw = 'It\'s a draw!'
 
-//TODO Scoring
+let playerChoice = '';
+let computerChoice = '';
+
 let computerScore = 0;
 let playerScore = 0;
+let drawCount = 0;
+
+let canPlayerChoose = true;
 
 //We need to check if player made a choice
 function isChoiceCorrect(playerChoice){
@@ -47,9 +49,10 @@ function isChoiceCorrect(playerChoice){
 
 
 //Let the computer choose with RNG
+
 //Will return the computer choice
 
-function computerChoosing(){
+function makeRandomChoice(){
 
     console.log('Computer\'s choosing');
 
@@ -114,16 +117,27 @@ function playRound(player, computer){
 
     if (isDraw(player, computer)) {
 
-        alert(`${msgDraw} ${message}`);
+        console.log(`${msgDraw} ${message}`);
+
+        drawCount += 1;
+
         return 
     }
 
     if(didPlayerWon(player, computer)){
-        alert(`${msgWon}  ${message}`);
+
+        console.log(`${msgWon}  ${message}`);
+
+        playerScore += 1;
+
         return
     }
     else if (!didPlayerWon(player, computer)){
-        alert(`${msgLost} ${message}`);
+        
+        console.log(`${msgLost} ${message}`);
+
+        computerScore +=1
+
         return
     }
 
@@ -133,41 +147,77 @@ function playRound(player, computer){
 }
 
 
-function gameLoop(numberOfRounds)
-{   
+function checkWinner(playerScore, computerScore){
 
-    for (let i = 0; i < numberOfRounds; i++){
+    if (playerScore == computerScore) return msgDraw
+    if (playerScore > computerScore) return msgWon
+    return msgLost
 
-        playerChoice = prompt(' Choose between "Rock", "Paper" and "Scissors" ')
+}
 
-        // If the input is null, 0 or undefined stop the game
-        if (!playerChoice) break;
 
-        playerChoice = playerChoice.toLowerCase()
+function printGameOverMessage(playerScore, computerScore, drawCount){
 
-        console.log('Game number ' + (i+1))
+    let finalResults = checkWinner(playerScore, computerScore);
+    let finalMessage = `Your score is ${playerScore} \nComputer's score is ${computerScore} \nThere was ${drawCount} draws`
 
-        if (isChoiceCorrect(playerChoice)){
+    console.clear();
+    if (!canPlayerChoose){
+        console.log('PC fought itself so...')
+        finalResults +=' Kinda...';
+    }
+    console.log(finalResults)
+    console.log(finalMessage);
+    console.log('Thanks for playing!')
 
-            computerChoice = computerChoosing();
-            playRound(playerChoice, computerChoice);
+}
 
-        }
-        else{
+function handleGame(roundNumber){
 
-            alert(`Oopise, there is no ${playerChoice} in this game!`); //Sounds afwul :D
+    console.log('');
+    console.log('Game number ' + (roundNumber))
+    if (canPlayerChoose) {playerChoice = prompt(' Choose between "Rock", "Paper" and "Scissors" ')}
 
-            i--; //Not punishing for misspells 
+    // If the input is null, 0 or undefined stop the game
+    if (!playerChoice) return 0;
 
-        }
+    if (canPlayerChoose && playerChoice == '42' && roundNumber == 1 ){
+        canPlayerChoose = false;
+        gameLoop(42);
+        return 0;
+    }
 
-        console.log('');
-        
+    canPlayerChoose? playerChoice = playerChoice.toLowerCase() : playerChoice = makeRandomChoice()
+
+   
+    if (isChoiceCorrect(playerChoice)){
+
+        computerChoice = makeRandomChoice();
+        playRound(playerChoice, computerChoice);
+
+    }
+    else{
+
+        console.log(`Oopise, there is no ${playerChoice} in this game!`); //Sounds afwul :D
+
+        handleGame(roundNumber) //Not punishing for misspells 
+
     }
 
 }
 
-gameLoop(5)
+function gameLoop(numberOfRounds = 5)
+{   
 
-console.clear()
-console.log('Thank you for playing this humble game by a no-name');
+    for (let i = 1; i <= numberOfRounds; i++){
+
+        if (handleGame(i) == 0) break;
+
+        
+    }
+
+    printGameOverMessage(playerScore, computerScore, drawCount);
+
+}
+
+gameLoop()
