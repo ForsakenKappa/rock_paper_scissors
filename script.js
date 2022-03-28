@@ -21,6 +21,8 @@ const MSG_DRAW = 'It\'s a draw!'
 const STOP = 'stop';
 const SECRET = Math.random();
 
+const NUMBER_OF_ROUNDS = 5;
+
 let playerChoice = '';
 let computerChoice = '';
 let computerChoice2 = '';
@@ -192,23 +194,25 @@ if it's a 'null' exit the game
 function handlePlayerChoice(roundNumber){
 
     if (canPlayerChoose) {
-        playerChoice = prompt(' Choose between "Rock", "Paper" and "Scissors" ');
+        while(true){
+            playerChoice = prompt(' Choose between "Rock", "Paper" and "Scissors" ');
+            switch(true){
+                case (parseInt(playerChoice) == 42 && roundNumber == 1):
+                    return SECRET
+                case (playerChoice == null || playerChoice == undefined):
+                    return STOP
+                case isChoiceCorrect(playerChoice.toLowerCase()):
+                    return playerChoice.toLowerCase()
+                default:
+                    console.log(`Apparently there is no ' ${playerChoice} ' in this game. Try again please.`); //Why it sounds so bad `:D
+            }
 
-        if (parseInt(playerChoice) == 42 && roundNumber == 1) return SECRET
-        if (playerChoice == null) return STOP
-
-        playerChoice = playerChoice.toLowerCase()
-        if (isChoiceCorrect(playerChoice)) return playerChoice
-
-        console.log(`Apparently there is no ' ${playerChoice} ' in this game. Try again please.`)
-        handlePlayerChoice(roundNumber)
-    }else{
-        return SECRET
+        }
     }
-
     
-
+    return SECRET
 }
+    
 
 function handleSecret(){
 
@@ -228,8 +232,8 @@ function handleGame(roundNumber){
     computerChoice = makeRandomChoice()
     console.log(`Computer choosed ${computerChoice}`)
 
-    if(playerChoice === STOP) return STOP
-    if(playerChoice === SECRET){
+    if(playerChoice == STOP) return STOP
+    if(playerChoice == SECRET){
         canPlayerChoose = false;
         handleSecret();
 
@@ -242,7 +246,7 @@ function handleGame(roundNumber){
 
 }
 
-function gameLoop(numberOfRounds = 5)
+function gameLoop(numberOfRounds)
 {   
 
     for (let i = 1; i <= numberOfRounds; i++){
@@ -257,4 +261,4 @@ function gameLoop(numberOfRounds = 5)
 }
 
 
-gameLoop();
+gameLoop(NUMBER_OF_ROUNDS);

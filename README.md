@@ -5,7 +5,7 @@ Made by ForsakenKappa with love and JS
 
 -  Game can handle unexpected inputs
 -  Input is case insensitive
--  Print who won with what score
+-  Game can print who won with what score
 -  Game has a plain secret -- The Answer
 
-To stop the game just press Enter or ESC
+To stop the game just press ESC
