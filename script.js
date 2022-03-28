@@ -27,6 +27,8 @@ let playerScore = 0;
 let drawCount = 0;
 
 let canPlayerChoose = true;
+let isStopped = false;
+
 
 //We need to check if player made a choice
 function isChoiceCorrect(playerChoice){
@@ -169,6 +171,7 @@ function printGameOverMessage(playerScore, computerScore, drawCount){
     console.log(finalResults)
     console.log(finalMessage);
     console.log('Thanks for playing!')
+    console.log('Press F5 to restart.')
 
 }
 
@@ -179,12 +182,13 @@ function handleGame(roundNumber){
     if (canPlayerChoose) {playerChoice = prompt(' Choose between "Rock", "Paper" and "Scissors" ')}
 
     // If the input is null, 0 or undefined stop the game
-    if (!playerChoice) return 0;
+    // return 1 means that we need to stop the game
+    if (!playerChoice) return 1;
 
     if (canPlayerChoose && playerChoice == '42' && roundNumber == 1 ){
         canPlayerChoose = false;
         gameLoop(42);
-        return 0;
+        return 1;
     }
 
     canPlayerChoose? playerChoice = playerChoice.toLowerCase() : playerChoice = makeRandomChoice()
@@ -200,7 +204,7 @@ function handleGame(roundNumber){
 
         console.log(`Oopise, there is no ${playerChoice} in this game!`); //Sounds afwul :D
 
-        handleGame(roundNumber) //Not punishing for misspells 
+        if (handleGame(roundNumber)) return 1; //Not punishing for misspells 
 
     }
 
@@ -211,13 +215,19 @@ function gameLoop(numberOfRounds = 5)
 
     for (let i = 1; i <= numberOfRounds; i++){
 
-        if (handleGame(i) == 0) break;
-
+        isStopped = handleGame(i);
+        if (isStopped) break;
         
     }
 
-    printGameOverMessage(playerScore, computerScore, drawCount);
+    if (isStopped){
+        canPlayerChoose? console.log('You aborted the game!') : printGameOverMessage(playerScore, computerScore, drawCount);
+    }
+    else{
+        printGameOverMessage(playerScore, computerScore, drawCount);
+    }
 
 }
 
-gameLoop()
+
+gameLoop();
