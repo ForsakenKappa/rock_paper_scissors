@@ -18,10 +18,6 @@ Paper -> Rock
 const MSG_WON = 'You won!';
 const MSG_LOST = 'You lost!';
 const MSG_DRAW = 'It\'s a draw!'
-const STOP = 'stop';
-const SECRET = Math.random();
-
-const NUMBER_OF_ROUNDS = 5;
 
 let playerChoice = '';
 let computerChoice = '';
@@ -197,10 +193,6 @@ function handlePlayerChoice(roundNumber){
         while(true){
             playerChoice = prompt(' Choose between "Rock", "Paper" and "Scissors" ');
             switch(true){
-                case (parseInt(playerChoice) == 42 && roundNumber == 1):
-                    return SECRET
-                case (playerChoice == null || playerChoice == undefined):
-                    return STOP
                 case isChoiceCorrect(playerChoice.toLowerCase()):
                     return playerChoice.toLowerCase()
                 default:
@@ -209,56 +201,15 @@ function handlePlayerChoice(roundNumber){
 
         }
     }
-    
-    return SECRET
-}
-    
-
-function handleSecret(){
-
-    computerChoice2 = makeRandomChoice();
-    console.log(`Computer 2 choosed ${computerChoice2}`)
-    playRound(computerChoice, computerChoice2);
 
 }
 
-function handleGame(roundNumber){
 
-    console.log('<==--- ---==>');
-    console.log('Game number ' + (roundNumber))
-    console.log('<==--- ---==>');
-
-    playerChoice = handlePlayerChoice(roundNumber)
-    computerChoice = makeRandomChoice()
-    console.log(`Computer choosed ${computerChoice}`)
-
-    if(playerChoice == STOP) return STOP
-    if(playerChoice == SECRET){
-        canPlayerChoose = false;
-        handleSecret();
-
-    }
-    else{
-        playRound(playerChoice, computerChoice)
-    }
-
-    
-
-}
-
-function gameLoop(numberOfRounds)
+function gameLoop()
 {   
-
-    for (let i = 1; i <= numberOfRounds; i++){
-
-        isStopped = handleGame(i);
-        if (isStopped) break;
-        
-    }
+    handleGame();
 
     printGameOverMessage(playerScore, computerScore, drawCount)
 
 }
 
-
-gameLoop(NUMBER_OF_ROUNDS);
