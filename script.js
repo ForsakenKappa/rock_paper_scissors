@@ -18,16 +18,15 @@ Paper -> Rock
 const MSG_WON = 'You won!';
 const MSG_LOST = 'You lost!';
 const MSG_DRAW = 'It\'s a draw!'
+const gameBtns = document.querySelectorAll('.button-container>button');
 
-let playerChoice = '';
 let computerChoice = '';
-let computerChoice2 = '';
+let playerChoice = '';
 
 let computerScore = 0;
 let playerScore = 0;
 let drawCount = 0;
 
-let gameBtns = document.querySelectorAll('.button-container>button');
 
 
 gameBtns.forEach(function(button){
@@ -36,27 +35,9 @@ gameBtns.forEach(function(button){
 
 
 function handleEvents(e){
-    console.log(this);
-}
-
-
-//We need to check if player made a choice
-function isChoiceCorrect(playerChoice){
-
-    console.log('Checking choice')
-
-    console.log(`Player choosed ${playerChoice}`);
-
-    switch(playerChoice){
-        case 'rock':
-        case 'paper':
-        case 'scissors':
-            return true
-        default:
-            return false
-    }
-    
-
+    computerChoice = makeRandomChoice();
+    playerChoice = this.className; // Class names are '.rock' , '.paper' , and '.scissors' obviosly 
+    playRound(playerChoice, computerChoice);
 }
 
 
@@ -182,34 +163,6 @@ function printGameOverMessage(playerScore, computerScore, drawCount){
     console.log(finalMessage);
     console.log('Thanks for playing!')
     console.log('Press F5 to restart.')
-
-}
-
-
-/*Handle choice function
-
-We accept a player's choice
-If it's a correct choice let the game begin
-If it's a secret choice at the first round let the secret begin 
-If it's an incorrect choice ask them to type the choice again
-if it's a 'null' exit the game
-
-*/
-
-function handlePlayerChoice(roundNumber){
-
-    if (canPlayerChoose) {
-        while(true){
-            playerChoice = prompt(' Choose between "Rock", "Paper" and "Scissors" ');
-            switch(true){
-                case isChoiceCorrect(playerChoice.toLowerCase()):
-                    return playerChoice.toLowerCase()
-                default:
-                    console.log(`Apparently there is no ' ${playerChoice} ' in this game. Try again please.`); //Why it sounds so bad `:D
-            }
-
-        }
-    }
 
 }
 
