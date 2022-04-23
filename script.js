@@ -18,11 +18,16 @@ Paper -> Rock
 const MSG_WON = 'You won!';
 const MSG_LOST = 'You lost!';
 const MSG_DRAW = 'It\'s a draw!'
+
 const gameBtns = document.querySelectorAll('.button-container>button');
+const textWins = document.querySelector('.wins');
+const textDraws = document.querySelector('.draws');
+const textLoses = document.querySelector('.loses');
 
 let computerChoice = '';
 let playerChoice = '';
 
+// Computer score is number of round player lose 
 let computerScore = 0;
 let playerScore = 0;
 let drawCount = 0;
@@ -114,6 +119,8 @@ function playRound(player, computer){
 
         drawCount += 1;
 
+        textDraws.textContent = drawCount;
+
         return 
     }
 
@@ -123,6 +130,8 @@ function playRound(player, computer){
 
         playerScore += 1;
 
+        textWins.textContent = playerScore;
+
         return
     }
     else if (!didPlayerWon(player, computer)){
@@ -130,6 +139,8 @@ function playRound(player, computer){
         console.log(`${MSG_LOST} ${message}`);
 
         computerScore +=1
+
+        textLoses.textContent = computerScore;
 
         return
     }
