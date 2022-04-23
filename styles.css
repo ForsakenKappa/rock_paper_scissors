@@ -27,6 +27,15 @@ li{
     
 }
 
+.interactions-container{
+    display: flex;
+}
+
+.mc{
+    width:100px;
+    height: 100px;
+}
+
 .score-container{
     display: flex;
     flex-flow: column;
