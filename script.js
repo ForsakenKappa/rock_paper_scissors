@@ -27,8 +27,17 @@ let computerScore = 0;
 let playerScore = 0;
 let drawCount = 0;
 
-let canPlayerChoose = true;
-let isStopped = false;
+let gameBtns = document.querySelectorAll('.button-container>button');
+
+
+gameBtns.forEach(function(button){
+    button.addEventListener('click', handleEvents)
+})
+
+
+function handleEvents(e){
+    console.log(this);
+}
 
 
 //We need to check if player made a choice
