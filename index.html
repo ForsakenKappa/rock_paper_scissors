@@ -4,29 +4,37 @@
         <meta charset="UTF-8">
         <title>Rock Paper Scissors</title>
         <script src="script.js" defer></script>
+        <link rel="stylesheet" href="styles.css">
     </head>
     <body>
         <div class ="game-container">
             <div class="button-container">
-                <button class = "rock"> Rock </button>
-                <button class = "paper"> Paper </button>
-                <button class = 'scissors'> Scissors </button>
+                <button class="reset"> Reset </button>
+                <div class="player-choices">
+                    <button class = "rock"> Rock </button>
+                    <button class = "paper"> Paper </button>
+                    <button class = 'scissors'> Scissors </button>
+                </div>
             </div>
             <div class = "score-container">
                 <ul>
                     <li>
-                         <p class="text"> Wins </p> 
+                         <p class="text"> Wins: </p> 
                          <p class="text wins"> 0 </p>
-                    </li>
-                    <li>
-                        <p class="text"> Draws </p>
-                        <p class="text draws"> 0 </p>
-                    </li>
-                    <li>
-                        <p class="text"> Loses </p>
-                        <p class="text loses"> 0 </p>
-                    </li>
+                        </li>
+                        <li>
+                            <p class="text"> Draws: </p>
+                            <p class="text draws"> 0 </p>
+                        </li>
+                        <li>
+                            <p class="text"> Loses: </p>
+                            <p class="text loses"> 0 </p>
+                        </li>
                 </ul>
+                <p class="text">Rounds played: <span class="text round-number"> 0 </span></p>
+            </div>
+            <div class="gameover-container">
+                <p class="text gameover"></p>
             </div>
         </div>
     </body>

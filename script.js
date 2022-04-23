@@ -19,32 +19,66 @@ const MSG_WON = 'You won!';
 const MSG_LOST = 'You lost!';
 const MSG_DRAW = 'It\'s a draw!'
 
-const gameBtns = document.querySelectorAll('.button-container>button');
-const textWins = document.querySelector('.wins');
-const textDraws = document.querySelector('.draws');
-const textLoses = document.querySelector('.loses');
+const choiceBtns = document.querySelectorAll('.player-choices>button');
+const resetBtn = document.querySelector('button.reset');
+const pWins = document.querySelector('.wins');
+const pDraws = document.querySelector('.draws');
+const pLoses = document.querySelector('.loses');
+const pRoundNumber = document.querySelector('.round-number')
+const pGameOverMessage = document.querySelector('.gameover')
 
 let computerChoice = '';
 let playerChoice = '';
 
-// Computer score is number of round player lose 
+// Computer score is number of rounds player lose 
 let computerScore = 0;
 let playerScore = 0;
 let drawCount = 0;
 
+let roundsPlayed = 0;
 
-
-gameBtns.forEach(function(button){
-    button.addEventListener('click', handleEvents)
-})
-
+resetBtn.addEventListener('click', setGame)
 
 function handleEvents(e){
     computerChoice = makeRandomChoice();
     playerChoice = this.className; // Class names are '.rock' , '.paper' , and '.scissors' obviosly 
     playRound(playerChoice, computerChoice);
+
+    if (roundsPlayed === 5) {
+        choiceBtns.forEach(function(button){
+            button.removeEventListener('click', handleEvents);
+        })
+        setGameOverMessage(playerScore, computerScore);
+    }
 }
 
+
+function resetValues(){
+
+    roundsPlayed = 0;
+    pRoundNumber.textContent = roundsPlayed;
+
+    computerScore = 0;
+    pLoses.textContent = computerScore;
+
+    playerScore = 0;
+    pWins.textContent = playerScore;
+
+    drawCount = 0;
+    pDraws.textContent = drawCount;
+
+    pGameOverMessage.textContent = '';
+}
+
+function setGame(){
+
+    resetValues();
+
+    choiceBtns.forEach(function(button){
+        button.addEventListener('click', handleEvents)
+    })    
+    
+}
 
 //Let the computer choose with RNG
 
@@ -113,13 +147,16 @@ function playRound(player, computer){
     //Too lazy to CtrlV CtrlC
     let message =  `You chosed ${player} computer chosed ${computer}`;
 
+    roundsPlayed += 1;
+    pRoundNumber.textContent = roundsPlayed;
+
     if (isDraw(player, computer)) {
 
         console.log(`${MSG_DRAW} ${message}`);
 
         drawCount += 1;
 
-        textDraws.textContent = drawCount;
+        pDraws.textContent = drawCount;
 
         return 
     }
@@ -130,7 +167,7 @@ function playRound(player, computer){
 
         playerScore += 1;
 
-        textWins.textContent = playerScore;
+        pWins.textContent = playerScore;
 
         return
     }
@@ -140,7 +177,7 @@ function playRound(player, computer){
 
         computerScore +=1
 
-        textLoses.textContent = computerScore;
+        pLoses.textContent = computerScore;
 
         return
     }
@@ -160,29 +197,14 @@ function checkWinner(playerScore, computerScore){
 }
 
 
-function printGameOverMessage(playerScore, computerScore, drawCount){
+function setGameOverMessage(playerScore, computerScore){
 
     let finalResults = checkWinner(playerScore, computerScore);
-    let finalMessage = `Your score is ${playerScore} \nComputer's score is ${computerScore} \nThere was ${drawCount} draws`
 
-    console.clear();
-    if (!canPlayerChoose){
-        console.log('PC fought itself so...')
-        finalResults +=' Kinda...';
-    }
-    console.log(finalResults)
-    console.log(finalMessage);
-    console.log('Thanks for playing!')
-    console.log('Press F5 to restart.')
+    pGameOverMessage.textContent = finalResults;
+
 
 }
 
 
-function gameLoop()
-{   
-    handleGame();
-
-    printGameOverMessage(playerScore, computerScore, drawCount)
-
-}
-
+setGame()
