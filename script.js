@@ -21,6 +21,10 @@ const MSG_DRAW = 'It\'s a draw!'
 
 const choiceBtns = document.querySelectorAll('.player-choices>button');
 const resetBtn = document.querySelector('button.reset');
+
+const imgPlayer = document.querySelector('img.player');
+const imgComputer = document.querySelector('img.computer');
+
 const pWins = document.querySelector('.wins');
 const pDraws = document.querySelector('.draws');
 const pLoses = document.querySelector('.loses');
