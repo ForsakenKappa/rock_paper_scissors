@@ -231,14 +231,14 @@ function showWinner(playerScore, computerScore){
     }
     else if (playerScore > computerScore){
 
-        imgComputer.src = 'images/lose.png'
+        imgComputer.src = 'images/pc-lose.png'
         imgPlayer.src = 'images/win.png'
         
         return MSG_WON
     }
     else{ 
 
-        imgComputer.src = 'images/win.png'
+        imgComputer.src = 'images/Trollface.png'
         imgPlayer.src = 'images/lose.png'
 
         return MSG_LOST
