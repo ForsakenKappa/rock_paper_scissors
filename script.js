@@ -1,3 +1,4 @@
+
 /*
 
 There would be 5 rounds of Rock Paper Scissors
@@ -15,21 +16,27 @@ Paper -> Rock
 */
 
 
+
 const MSG_WON = 'You won!';
 const MSG_LOST = 'You lost!';
 const MSG_DRAW = 'It\'s a draw!'
 
-const choiceBtns = document.querySelectorAll('.player-choices>button');
-const resetBtn = document.querySelector('button.reset');
+const btnsChoices = document.querySelectorAll('.player-choices>button');
+const btnReset = document.querySelector('button.reset');
 
-const imgPlayer = document.querySelector('img.player');
-const imgComputer = document.querySelector('img.computer');
+const imgPlayer = document.querySelector('.player.char>img');
+const imgComputer = document.querySelector('.computer.char>img');
 
 const pWins = document.querySelector('.wins');
 const pDraws = document.querySelector('.draws');
 const pLoses = document.querySelector('.loses');
-const pRoundNumber = document.querySelector('.round-number')
-const pGameOverMessage = document.querySelector('.gameover')
+
+const pRoundNumber = document.querySelector('.round-number');
+const pGameOverMessage = document.querySelector('.gameover');
+const pCountdown = document.querySelector('.countdown');
+
+const pComputerChoice = document.querySelector('.computer-choice');
+const pPlayerChoice = document.querySelector('.player-choice');
 
 let computerChoice = '';
 let playerChoice = '';
@@ -41,18 +48,21 @@ let drawCount = 0;
 
 let roundsPlayed = 0;
 
-resetBtn.addEventListener('click', setGame)
+btnReset.addEventListener('click', setGame)
+
 
 function handleEvents(e){
     computerChoice = makeRandomChoice();
     playerChoice = this.className; // Class names are '.rock' , '.paper' , and '.scissors' obviosly 
+
     playRound(playerChoice, computerChoice);
 
+
     if (roundsPlayed === 5) {
-        choiceBtns.forEach(function(button){
+        btnsChoices.forEach(function(button){
             button.removeEventListener('click', handleEvents);
         })
-        setGameOverMessage(playerScore, computerScore);
+        setGameOver(playerScore, computerScore);
     }
 }
 
@@ -71,6 +81,12 @@ function resetValues(){
     drawCount = 0;
     pDraws.textContent = drawCount;
 
+    imgComputer.src = 'images/Thinking.jpg';
+    imgPlayer.src = 'images/Thinking.jpg';
+
+    pComputerChoice.textContent = '';
+    pPlayerChoice.textContent = '';
+
     pGameOverMessage.textContent = '';
 }
 
@@ -78,7 +94,7 @@ function setGame(){
 
     resetValues();
 
-    choiceBtns.forEach(function(button){
+    btnsChoices.forEach(function(button){
         button.addEventListener('click', handleEvents)
     })    
     
@@ -154,6 +170,9 @@ function playRound(player, computer){
     roundsPlayed += 1;
     pRoundNumber.textContent = roundsPlayed;
 
+    pComputerChoice.textContent = computerChoice.toUpperCase();
+    pPlayerChoice.textContent = playerChoice.toUpperCase();
+
     if (isDraw(player, computer)) {
 
         console.log(`${MSG_DRAW} ${message}`);
@@ -161,6 +180,9 @@ function playRound(player, computer){
         drawCount += 1;
 
         pDraws.textContent = drawCount;
+
+        imgComputer.src = 'images/draw-round.png'
+        imgPlayer.src = 'images/draw-round.png';
 
         return 
     }
@@ -173,6 +195,9 @@ function playRound(player, computer){
 
         pWins.textContent = playerScore;
 
+        imgPlayer.src = 'images/win-round.png';
+        imgComputer.src = 'images/lose-round.png';
+
         return
     }
     else if (!didPlayerWon(player, computer)){
@@ -183,6 +208,9 @@ function playRound(player, computer){
 
         pLoses.textContent = computerScore;
 
+        imgComputer.src = 'images/win-round.png';
+        imgPlayer.src = 'images/lose-round.png';
+
         return
     }
 
@@ -192,21 +220,38 @@ function playRound(player, computer){
 }
 
 
-function checkWinner(playerScore, computerScore){
+function showWinner(playerScore, computerScore){
 
-    if (playerScore == computerScore) return MSG_DRAW
-    if (playerScore > computerScore) return MSG_WON
-    return MSG_LOST
+    if (playerScore == computerScore){
+
+        imgComputer.src = 'images/draw1.png'
+        imgPlayer.src = 'images/draw1.png'
+
+        return MSG_DRAW 
+    }
+    else if (playerScore > computerScore){
+
+        imgComputer.src = 'images/lose.png'
+        imgPlayer.src = 'images/win.png'
+        
+        return MSG_WON
+    }
+    else{ 
+
+        imgComputer.src = 'images/win.png'
+        imgPlayer.src = 'images/lose.png'
+
+        return MSG_LOST
+    }
 
 }
 
 
-function setGameOverMessage(playerScore, computerScore){
+function setGameOver(playerScore, computerScore){
 
-    let finalResults = checkWinner(playerScore, computerScore);
+    let finalResults = showWinner(playerScore, computerScore);
 
     pGameOverMessage.textContent = finalResults;
-
 
 }
 

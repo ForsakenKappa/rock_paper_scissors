@@ -31,16 +31,27 @@ li{
 
 }
 
-.computer{
+.computer img{
     scale: -1 1; 
 }
 
-.hands{
+.round-results{
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 128px 0px 180px
+}
+
+.hand, .countdown{
     scale: 3;
+}
+
+.invisible{
+    scale: 0;
 }
 
 .char{
     display: inherit;
+    flex-flow: column;
     align-items: center;
 }
 
@@ -52,6 +63,11 @@ li{
 }
 
 .interactions-container{
+    display: flex;
+    justify-content: center;
+}
+
+.countdown{
     display: flex;
     justify-content: center;
 }
