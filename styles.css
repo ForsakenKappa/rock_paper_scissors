@@ -1,0 +1,105 @@
+
+button{
+    width: 64px;
+    height: 64px;
+    margin: 0px;
+}
+
+img{
+    width: 256px;
+}
+
+
+ul{
+    display: flex;
+    flex-flow: row;
+    gap: 20px;
+    list-style: none;
+    
+    margin: 0px;
+    padding: 0px;
+}
+
+li{
+    display: flex;
+    gap: 8px;
+}
+
+.chars-container{
+    display: flex;
+    gap: 260px;
+
+}
+
+.computer img{
+    scale: -1 1; 
+}
+
+.round-results{
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 128px 0px 180px
+}
+
+.hand, .countdown{
+    scale: 3;
+}
+
+.invisible{
+    scale: 0;
+}
+
+.char{
+    display: inherit;
+    flex-flow: column;
+    align-items: center;
+}
+
+.text{
+    font-family: monospace;
+    font-size: 16px;
+    margin: 4px 0px;
+    
+}
+
+.interactions-container{
+    display: flex;
+    justify-content: center;
+}
+
+.countdown{
+    display: flex;
+    justify-content: center;
+}
+
+.mc{
+    width:100px;
+    height: 100px;
+}
+
+.score-container{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    
+    flex: auto;
+}
+
+.player-choices{
+    display: flex;
+    flex-flow: column;
+}
+
+.game-container{
+    padding: 90px;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-content: center;
+    
+}
+
+.gameover-container{
+    display: flex;
+    justify-content: center;
+}

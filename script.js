@@ -1,3 +1,4 @@
+
 /*
 
 There would be 5 rounds of Rock Paper Scissors
@@ -15,45 +16,89 @@ Paper -> Rock
 */
 
 
+
 const MSG_WON = 'You won!';
 const MSG_LOST = 'You lost!';
 const MSG_DRAW = 'It\'s a draw!'
-const STOP = 'stop';
-const SECRET = Math.random();
 
-const NUMBER_OF_ROUNDS = 5;
+const btnsChoices = document.querySelectorAll('.player-choices>button');
+const btnReset = document.querySelector('button.reset');
 
-let playerChoice = '';
+const imgPlayer = document.querySelector('.player.char>img');
+const imgComputer = document.querySelector('.computer.char>img');
+
+const pWins = document.querySelector('.wins');
+const pDraws = document.querySelector('.draws');
+const pLoses = document.querySelector('.loses');
+
+const pRoundNumber = document.querySelector('.round-number');
+const pGameOverMessage = document.querySelector('.gameover');
+const pCountdown = document.querySelector('.countdown');
+
+const pComputerChoice = document.querySelector('.computer-choice');
+const pPlayerChoice = document.querySelector('.player-choice');
+
 let computerChoice = '';
-let computerChoice2 = '';
+let playerChoice = '';
 
+// Computer score is number of rounds player lose 
 let computerScore = 0;
 let playerScore = 0;
 let drawCount = 0;
 
-let canPlayerChoose = true;
-let isStopped = false;
+let roundsPlayed = 0;
+
+btnReset.addEventListener('click', setGame)
 
 
-//We need to check if player made a choice
-function isChoiceCorrect(playerChoice){
+function handleEvents(e){
+    computerChoice = makeRandomChoice();
+    playerChoice = this.className; // Class names are '.rock' , '.paper' , and '.scissors' obviosly 
 
-    console.log('Checking choice')
+    playRound(playerChoice, computerChoice);
 
-    console.log(`Player choosed ${playerChoice}`);
 
-    switch(playerChoice){
-        case 'rock':
-        case 'paper':
-        case 'scissors':
-            return true
-        default:
-            return false
+    if (roundsPlayed === 5) {
+        btnsChoices.forEach(function(button){
+            button.removeEventListener('click', handleEvents);
+        })
+        setGameOver(playerScore, computerScore);
     }
-    
-
 }
 
+
+function resetValues(){
+
+    roundsPlayed = 0;
+    pRoundNumber.textContent = roundsPlayed;
+
+    computerScore = 0;
+    pLoses.textContent = computerScore;
+
+    playerScore = 0;
+    pWins.textContent = playerScore;
+
+    drawCount = 0;
+    pDraws.textContent = drawCount;
+
+    imgComputer.src = 'images/Thinking.jpg';
+    imgPlayer.src = 'images/Thinking.jpg';
+
+    pComputerChoice.textContent = '';
+    pPlayerChoice.textContent = '';
+
+    pGameOverMessage.textContent = '';
+}
+
+function setGame(){
+
+    resetValues();
+
+    btnsChoices.forEach(function(button){
+        button.addEventListener('click', handleEvents)
+    })    
+    
+}
 
 //Let the computer choose with RNG
 
@@ -122,11 +167,22 @@ function playRound(player, computer){
     //Too lazy to CtrlV CtrlC
     let message =  `You chosed ${player} computer chosed ${computer}`;
 
+    roundsPlayed += 1;
+    pRoundNumber.textContent = roundsPlayed;
+
+    pComputerChoice.textContent = computerChoice.toUpperCase();
+    pPlayerChoice.textContent = playerChoice.toUpperCase();
+
     if (isDraw(player, computer)) {
 
         console.log(`${MSG_DRAW} ${message}`);
 
         drawCount += 1;
+
+        pDraws.textContent = drawCount;
+
+        imgComputer.src = 'images/draw-round.png'
+        imgPlayer.src = 'images/draw-round.png';
 
         return 
     }
@@ -137,6 +193,11 @@ function playRound(player, computer){
 
         playerScore += 1;
 
+        pWins.textContent = playerScore;
+
+        imgPlayer.src = 'images/win-round.png';
+        imgComputer.src = 'images/lose-round.png';
+
         return
     }
     else if (!didPlayerWon(player, computer)){
@@ -144,6 +205,11 @@ function playRound(player, computer){
         console.log(`${MSG_LOST} ${message}`);
 
         computerScore +=1
+
+        pLoses.textContent = computerScore;
+
+        imgComputer.src = 'images/win-round.png';
+        imgPlayer.src = 'images/lose-round.png';
 
         return
     }
@@ -154,111 +220,40 @@ function playRound(player, computer){
 }
 
 
-function checkWinner(playerScore, computerScore){
+function showWinner(playerScore, computerScore){
 
-    if (playerScore == computerScore) return MSG_DRAW
-    if (playerScore > computerScore) return MSG_WON
-    return MSG_LOST
+    if (playerScore == computerScore){
 
-}
+        imgComputer.src = 'images/draw1.png'
+        imgPlayer.src = 'images/draw1.png'
 
-
-function printGameOverMessage(playerScore, computerScore, drawCount){
-
-    let finalResults = checkWinner(playerScore, computerScore);
-    let finalMessage = `Your score is ${playerScore} \nComputer's score is ${computerScore} \nThere was ${drawCount} draws`
-
-    console.clear();
-    if (!canPlayerChoose){
-        console.log('PC fought itself so...')
-        finalResults +=' Kinda...';
+        return MSG_DRAW 
     }
-    console.log(finalResults)
-    console.log(finalMessage);
-    console.log('Thanks for playing!')
-    console.log('Press F5 to restart.')
+    else if (playerScore > computerScore){
 
-}
-
-
-/*Handle choice function
-
-We accept a player's choice
-If it's a correct choice let the game begin
-If it's a secret choice at the first round let the secret begin 
-If it's an incorrect choice ask them to type the choice again
-if it's a 'null' exit the game
-
-*/
-
-function handlePlayerChoice(roundNumber){
-
-    if (canPlayerChoose) {
-        while(true){
-            playerChoice = prompt(' Choose between "Rock", "Paper" and "Scissors" ');
-            switch(true){
-                case (parseInt(playerChoice) == 42 && roundNumber == 1):
-                    return SECRET
-                case (playerChoice == null || playerChoice == undefined):
-                    return STOP
-                case isChoiceCorrect(playerChoice.toLowerCase()):
-                    return playerChoice.toLowerCase()
-                default:
-                    console.log(`Apparently there is no ' ${playerChoice} ' in this game. Try again please.`); //Why it sounds so bad `:D
-            }
-
-        }
-    }
-    
-    return SECRET
-}
-    
-
-function handleSecret(){
-
-    computerChoice2 = makeRandomChoice();
-    console.log(`Computer 2 choosed ${computerChoice2}`)
-    playRound(computerChoice, computerChoice2);
-
-}
-
-function handleGame(roundNumber){
-
-    console.log('<==--- ---==>');
-    console.log('Game number ' + (roundNumber))
-    console.log('<==--- ---==>');
-
-    playerChoice = handlePlayerChoice(roundNumber)
-    computerChoice = makeRandomChoice()
-    console.log(`Computer choosed ${computerChoice}`)
-
-    if(playerChoice == STOP) return STOP
-    if(playerChoice == SECRET){
-        canPlayerChoose = false;
-        handleSecret();
-
-    }
-    else{
-        playRound(playerChoice, computerChoice)
-    }
-
-    
-
-}
-
-function gameLoop(numberOfRounds)
-{   
-
-    for (let i = 1; i <= numberOfRounds; i++){
-
-        isStopped = handleGame(i);
-        if (isStopped) break;
+        imgComputer.src = 'images/pc-lose.png'
+        imgPlayer.src = 'images/win.png'
         
+        return MSG_WON
     }
+    else{ 
 
-    printGameOverMessage(playerScore, computerScore, drawCount)
+        imgComputer.src = 'images/Trollface.png'
+        imgPlayer.src = 'images/lose.png'
+
+        return MSG_LOST
+    }
 
 }
 
 
-gameLoop(NUMBER_OF_ROUNDS);
+function setGameOver(playerScore, computerScore){
+
+    let finalResults = showWinner(playerScore, computerScore);
+
+    pGameOverMessage.textContent = finalResults;
+
+}
+
+
+setGame()

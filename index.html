@@ -3,8 +3,54 @@
     <head>
         <meta charset="UTF-8">
         <title>Rock Paper Scissors</title>
+        <script src="script.js" defer></script>
+        <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <script src="script.js"></script>
+        <div>
+            <h3 class="text">Rock-Paper-Scissors 2007 edition</h3>
+        </div>
+        <div class ="game-container">
+            <div class="interactions-container">
+                <div class="button-container">
+                    <button class="reset"> Reset </button>
+                    <div class="player-choices">
+                        <button class = "rock"> Rock </button>
+                        <button class = "paper"> Paper </button>
+                        <button class = 'scissors'> Scissors </button>
+                    </div>
+                </div>
+                <div class="chars-container">
+                    <div class="player char">
+                        <p class="text player-choice"></p>
+                        <img src="images/Thinking.jpg">
+                    </div>
+                    <div class="computer char">
+                        <p class="text computer-choice"></p>
+                        <img src="images/Thinking.jpg">
+                    </div>
+                </div>
+            </div>
+            <div class = "score-container">
+                <ul>
+                    <li>
+                         <p class="text"> Wins: </p> 
+                         <p class="text wins"> 0 </p>
+                        </li>
+                        <li>
+                            <p class="text"> Draws: </p>
+                            <p class="text draws"> 0 </p>
+                        </li>
+                        <li>
+                            <p class="text"> Loses: </p>
+                            <p class="text loses"> 0 </p>
+                        </li>
+                </ul>
+                <p class="text">Rounds played: <span class="text round-number"> 0 </span></p>
+            </div>
+            <div class="gameover-container">
+                <p class="text gameover"></p>
+            </div>
+        </div>
     </body>
 </html>
